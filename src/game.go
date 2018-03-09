@@ -46,5 +46,4 @@ func (g *Game) Run() {
 }
 
 func (g *Game) generateFirstTask() {
-
 }

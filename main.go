@@ -10,10 +10,10 @@ func main() {
 	service := micro.NewService(micro.Name("game-mode"))
 	service.Init()
 
-	gm := new(gamemode.GameService)
-	gm.Init(service.Client())
+	handler := new(gamemode.GameService)
+	handler.Init(service.Client())
 
-	gm_api.RegisterGameServiceHandler(service.Server(), gm)
+	gm_api.RegisterGameServiceHandler(service.Server(), handler)
 
 	go service.Run()
 
