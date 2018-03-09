@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service GameService {
+    rpc StartGame (StartGameReq) returns (SimpleRsp) {
+    };
+}
+
+message SimpleRsp {
+}
+
+message StartGameReq {
+    string token = 1;
+    string name = 2;
+}
+
