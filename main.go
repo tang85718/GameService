@@ -46,11 +46,15 @@ func main() {
 	}()
 
 	game := gamemode.Game{}
+	game.Init()
+	//go game.Push("one")
+	//go game.Push("two")
 
 	handler := new(gamemode.GameService)
 	handler.Init(&game, service.Client())
 
 	gm_api.RegisterGameServiceHandler(service.Server(), handler)
 	go game.Run(service)
+
 	service.Run()
 }

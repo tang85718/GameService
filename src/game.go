@@ -12,6 +12,10 @@ type Game struct {
 	token chan string
 }
 
+func (g *Game) Init() {
+	g.token = make(chan string)
+}
+
 func (g *Game) Push(t string) {
 	g.token <- t
 }
@@ -22,8 +26,9 @@ func (g *Game) Run(service micro.Service) {
 	}()
 
 	for {
-		intput := <- g.token
-		fmt.Printf("game running....%s\n", intput)
+		var input string
+		input = <-g.token
+		fmt.Printf("game running....%s\n", input)
 		time.Sleep(time.Second)
 		//panic("debug")
 	}
