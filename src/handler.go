@@ -10,19 +10,29 @@ import (
 )
 
 type GameService struct {
-	crm  crm_api.CRMServiceClient
-	game *Game
+	crm     crm_api.CRMServiceClient
+	game    *Game
+	factory *ActorFactory
 }
 
 func (s *GameService) Init(g *Game, c client.Client) {
 	s.crm = crm_api.NewCRMServiceClient("crmService", c)
 	s.game = g
+	s.factory = new(ActorFactory)
+	s.factory.Init()
 }
 
 func (s *GameService) StartGame(c context.Context, in *gm_api.StartGameReq, out *gm_api.SimpleRsp) error {
 	fmt.Println("Starting Game...")
 	// create actor
-	createNewActor(in.Token, in.Name)
-	time.Sleep(time.Second * 3)
+	s.game.Push(in.Token)
+
+	n, err := s.factory.createNewActor(in.Token, in.Name)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(n.PlayerToken)
+	//time.Sleep(time.Second * 3)
 	return nil
 }

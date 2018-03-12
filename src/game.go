@@ -2,26 +2,30 @@ package gamemode
 
 import (
 	"time"
-	"fmt"
-	"gopkg.in/mgo.v2"
-	"github.com/tangxuyao/mongo"
 	"container/list"
+	"github.com/micro/go-micro"
+	"fmt"
 )
 
 type Game struct {
-	actors list.List
+	queue chan list.List
+	token chan string
 }
 
-func (g *Game) Run() {
+func (g *Game) Push(t string) {
+	g.token <- t
+}
 
-	ms, err := mgo.Dial("")
-	if err != nil {
-		panic(err)
-	}
+func (g *Game) Run(service micro.Service) {
+	defer func() {
+		service.Server().Deregister()
+	}()
 
 	for {
-		fmt.Println("game running....")
+		intput := <- g.token
+		fmt.Printf("game running....%s\n", intput)
 		time.Sleep(time.Second)
+		//panic("debug")
 	}
 }
 

@@ -8,22 +8,39 @@ import (
 	"fmt"
 )
 
-func createNewActor(token string, name string) (*mongo.Charactor, error) {
+type ActorFactory struct {
+	ms *mgo.Session
+}
+
+func (f *ActorFactory) Init() error {
 	ms, err := mgo.Dial("")
 	if err != nil {
-		return nil, err
+		return err
+	}
+	f.ms = ms
+	return nil
+}
+
+func (f *ActorFactory) CheckHealth() error {
+	if f.ms.Ping() != nil {
+		return nil
 	}
 
-	defer ms.Close()
+	f.ms.Close()
+	f.Init()
 
-	playerCol := ms.DB(mongo.DB_ROOT).C(mongo.C_PLAYER)
+	return nil
+}
+
+func (f *ActorFactory) createNewActor(token string, name string) (*mongo.Charactor, error) {
+	playerCol := f.ms.DB(mongo.DB_ROOT).C(mongo.C_PLAYER)
 	player := mongo.Player{}
-	err = playerCol.Find(bson.M{"token": token}).One(&player)
+	err := playerCol.Find(bson.M{"token": token}).One(&player)
 	if err != nil {
 		return nil, err
 	}
 
-	actorCOL := ms.DB(mongo.DB_ROOT).C(mongo.C_ACTOR)
+	actorCOL := f.ms.DB(mongo.DB_ROOT).C(mongo.C_ACTOR)
 	count, err := actorCOL.Find(bson.M{"player_token": player.Token}).Count()
 
 	if count > 0 {
