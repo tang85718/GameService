@@ -5,20 +5,18 @@ import (
 	"proto/gm"
 	"github.com/micro/go-micro/client"
 	"proto/crm"
-	"github.com/tangxuyao/mongo"
-	"gopkg.in/mgo.v2/bson"
-	"gopkg.in/mgo.v2"
-	"errors"
 	"fmt"
 	"time"
 )
 
 type GameService struct {
-	crm crm_api.CRMServiceClient
+	crm  crm_api.CRMServiceClient
+	game *Game
 }
 
-func (s *GameService) Init(c client.Client) {
+func (s *GameService) Init(g *Game, c client.Client) {
 	s.crm = crm_api.NewCRMServiceClient("crmService", c)
+	s.game = g
 }
 
 func (s *GameService) StartGame(c context.Context, in *gm_api.StartGameReq, out *gm_api.SimpleRsp) error {
@@ -28,5 +26,3 @@ func (s *GameService) StartGame(c context.Context, in *gm_api.StartGameReq, out 
 	time.Sleep(time.Second * 3)
 	return nil
 }
-
-

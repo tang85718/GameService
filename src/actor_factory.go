@@ -4,6 +4,8 @@ import (
 	"github.com/tangxuyao/mongo"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"errors"
+	"fmt"
 )
 
 func createNewActor(token string, name string) (*mongo.Charactor, error) {
@@ -11,6 +13,8 @@ func createNewActor(token string, name string) (*mongo.Charactor, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	defer ms.Close()
 
 	playerCol := ms.DB(mongo.DB_ROOT).C(mongo.C_PLAYER)
 	player := mongo.Player{}
