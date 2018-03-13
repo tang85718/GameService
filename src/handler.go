@@ -6,7 +6,7 @@ import (
 	"github.com/micro/go-micro/client"
 	"proto/crm"
 	"fmt"
-	"./activities"
+	"./controllers"
 )
 
 type GameService struct {
@@ -23,13 +23,17 @@ func (s *GameService) Init(g *Game, c client.Client) {
 }
 
 func (s *GameService) StartGame(c context.Context, in *gm_api.StartGameReq, out *gm_api.SimpleRsp) error {
-	go s.game.Push(in.Token)
-
 	// create actor
 	n, err := s.factory.createNewActor(in.Token, in.Name)
 	if err != nil {
 		return err
 	}
+
+	factory := controllers.ControllerFactory{}
+	ac := factory.CreateController(n)
+
+	go s.game.Push(ac)
+
 
 	fmt.Println(n.PlayerToken)
 	//time.Sleep(time.Second * 3)

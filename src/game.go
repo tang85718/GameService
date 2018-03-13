@@ -5,6 +5,7 @@ import (
 	"container/list"
 	"github.com/micro/go-micro"
 	"fmt"
+	"./controllers"
 )
 
 type Game struct {
