@@ -1,11 +1,11 @@
 package controllers
 
-import "github.com/tangxuyao/mongo"
+import "../../../MongoData"
 
 type ControllerFactory struct {
 }
 
-func (f *ControllerFactory) CreateController(c *mongo.Charactor) ActorController {
-	a := ActorController{actor:c}
-	return &a
+func (f *ControllerFactory) CreateController(mgo *mongo.MongoDB, c *mongo.Charactor) ActorController {
+	a := ActorController{actor: c, mgo: mgo}
+	return a
 }

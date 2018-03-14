@@ -1,24 +1,20 @@
 package gamemode
 
 import (
-	"time"
-	"container/list"
 	"github.com/micro/go-micro"
-	"fmt"
 	"./controllers"
+	"fmt"
+	"../../MongoData"
 )
 
 type Game struct {
-	queue chan list.List
-	token chan string
+	mgo *mongo.MongoDB
 }
 
 func (g *Game) Init() {
-	g.token = make(chan string)
 }
 
-func (g *Game) Push(t string) {
-	g.token <- t
+func (g *Game) execute(c controllers.Controller) {
 }
 
 func (g *Game) Run(service micro.Service) {
@@ -27,11 +23,11 @@ func (g *Game) Run(service micro.Service) {
 	}()
 
 	for {
-		var input string
-		input = <-g.token
-		fmt.Printf("game running....%s\n", input)
-		time.Sleep(time.Second)
-		//panic("debug")
+		actor := mongo.Charactor{}
+		if err := actor.FromDB(g.mgo); err != nil {
+
+		}
+		fmt.Println("[debug] Game Running..")
 	}
 }
 
