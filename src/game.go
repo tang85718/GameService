@@ -2,19 +2,12 @@ package gamemode
 
 import (
 	"github.com/micro/go-micro"
-	"./controllers"
-	"fmt"
 	"../../MongoData"
+	"time"
 )
 
 type Game struct {
-	mgo *mongo.MongoDB
-}
-
-func (g *Game) Init() {
-}
-
-func (g *Game) execute(c controllers.Controller) {
+	M *mongo.MongoDB
 }
 
 func (g *Game) Run(service micro.Service) {
@@ -23,13 +16,10 @@ func (g *Game) Run(service micro.Service) {
 	}()
 
 	for {
-		actor := mongo.Charactor{}
-		if err := actor.FromDB(g.mgo); err != nil {
 
-		}
-		fmt.Println("[debug] Game Running..")
+
+
+		time.Sleep(time.Second * 5)
+		//fmt.Println("[debug] Game Running..")
 	}
-}
-
-func (g *Game) generateFirstTask() {
 }

@@ -1,11 +1,19 @@
 syntax = "proto3";
 
 service GameService {
-    rpc StartGame (StartGameReq) returns (SimpleRsp) {
+    rpc StartGame (StartGameReq) returns (StartGameRsp) {
+    };
+    rpc PingGame (PingGameReq) returns (PingGameRsp) {
     };
 }
 
-message SimpleRsp {
+message PingGameReq {
+}
+
+message PingGameRsp {
+}
+
+message StartGameRsp {
 }
 
 message StartGameReq {

@@ -3,6 +3,7 @@ package gamemode
 import (
 	"../../MongoData"
 	"fmt"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type ActorFactory struct {
@@ -23,6 +24,7 @@ func (f *ActorFactory) createNew(token string, name string) (*mongo.Charactor, e
 	//}
 
 	actor := mongo.Charactor{
+		ID:          bson.NewObjectId(),
 		PlayerToken: token,
 		Name:        name,
 		HP:          5,
@@ -30,8 +32,8 @@ func (f *ActorFactory) createNew(token string, name string) (*mongo.Charactor, e
 		EnergyType:  0,
 	}
 
-	actor.ToDB(f.mgo)
+	actor.ToDB(f.mgo, mongo.DB_GLOBAL)
 
-	fmt.Printf("创建新角色%s, 属于玩家%s(%s)\n", name, player.DisplayID, player.Token)
+	fmt.Printf("创建新角色%s, 属于玩家%s(%s)\n", name, player.DisplayID, player.ID)
 	return &actor, nil
 }
