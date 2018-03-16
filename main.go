@@ -6,6 +6,8 @@ import (
 	"./src"
 	"../MongoData"
 	"fmt"
+	"proto/asylum"
+	"proto/crm"
 )
 
 func main() {
@@ -21,10 +23,14 @@ func main() {
 		service.Server().Deregister()
 	}()
 
-	game := gamemode.Game{M: mg}
+	cli := service.Client()
+	crm := crm_api.NewCRMServiceClient("crmService", cli)
+	asylum := asylum_api.NewAsylumServiceClient("AsylumService", cli)
 
-	handler := new(gamemode.GameService)
-	handler.Init(&game, service.Client())
+	game := gamemode.Game{M: mg, Asylum: asylum}
+
+	handler := &gamemode.GameService{Crm: crm, Asylum: asylum}
+	handler.Init(mg)
 
 	gm_api.RegisterGameServiceHandler(service.Server(), handler)
 
