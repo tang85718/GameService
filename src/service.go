@@ -1,9 +1,9 @@
 package gamemode
 
 import (
+	"../../MongoData"
 	"golang.org/x/net/context"
 	"proto/gm"
-	"../../MongoData"
 	"proto/crm"
 	"proto/asylum"
 	"log"
@@ -28,8 +28,7 @@ func (s *GameService) StartGame(ctx context.Context, in *gm_api.StartGameReq, ou
 	}
 
 	actorID := actor.ID.Hex()
-
-	_, err = s.Asylum.TakeActor(context.TODO(), &asylum_api.TakeActorReq{Token: actorID})
+	_, err = s.Asylum.StartStory(context.TODO(), &asylum_api.StartStoryReq{Token: actorID})
 	if err != nil {
 		return err
 	}

@@ -25,18 +25,20 @@ func (g *Game) Run(service micro.Service) {
 	for {
 		actor := mongo.Charactor{}
 		if itr.Next(&actor) {
-
 			switch actor.Place {
 			case mongo.PLACE_GOD_SPACE:
-				_, err := g.Asylum.TakeActor(context.TODO(), &asylum_api.TakeActorReq{Token: actor.ID.Hex()})
+				_, err := g.Asylum.StartStory(context.TODO(), &asylum_api.StartStoryReq{Token: actor.ID.Hex()})
 				if err != nil {
-					log.Println("invoke TakeActor error: " + err.Error())
+					log.Println("Invoke StartStory error: " + err.Error())
 				}
 			case mongo.PLACE_ASYLUM:
+				_, err := g.Asylum.RunStory(context.TODO(), &asylum_api.RunStoryReq{Token: actor.ID.Hex()})
+				if err != nil {
+					log.Fatalln("Invoke RunStory error: " + err.Error())
+				}
 			case mongo.PLACE_WILDERNESS:
 			default:
 			}
-
 		}
 
 		time.Sleep(time.Second * 5)
